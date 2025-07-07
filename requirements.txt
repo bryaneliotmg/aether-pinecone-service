@@ -1,4 +1,5 @@
 fastapi
 uvicorn
-openai==1.3.7
+openai==1.3.9
 pinecone
+httpx==0.24.1
