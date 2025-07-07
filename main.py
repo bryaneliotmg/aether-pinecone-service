@@ -34,4 +34,12 @@ async def upsert_vectors(data: UpsertRequest):
         for i, item in enumerate(data.items)
     ]
     index.upsert(vectors=vectors, namespace=data.namespace)
-    return {"status": "success", "count": len(vectors)}
+    from fastapi.responses import JSONResponse
+
+...
+
+return JSONResponse(
+    status_code=200,
+    content={"status": "success", "count": len(vectors)},
+    media_type="application/json"
+)
