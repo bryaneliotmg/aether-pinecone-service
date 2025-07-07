@@ -1,16 +1,20 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from pinecone import Pinecone, ServerlessSpec
+from fastapi.responses import JSONResponse
+from pinecone import Pinecone
 import openai
 import os
 
+# Load API keys
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
+# Init clients
 openai.api_key = OPENAI_API_KEY
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index("aether-core")
+index = pc.Index("aether-core")  # Make sure this index name matches your Pinecone index
 
+# FastAPI app
 app = FastAPI()
 
 class Item(BaseModel):
@@ -34,12 +38,8 @@ async def upsert_vectors(data: UpsertRequest):
         for i, item in enumerate(data.items)
     ]
     index.upsert(vectors=vectors, namespace=data.namespace)
-    from fastapi.responses import JSONResponse
-
-...
-
-return JSONResponse(
-    status_code=200,
-    content={"status": "success", "count": len(vectors)},
-    media_type="application/json"
-)
+    return JSONResponse(
+        status_code=200,
+        content={"status": "success", "count": len(vectors)},
+        media_type="application/json"
+    )
