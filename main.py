@@ -9,7 +9,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 openai.api_key = OPENAI_API_KEY
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index("text-embedding-3-small")
+index = pc.Index("aether-core")
 
 app = FastAPI()
 
